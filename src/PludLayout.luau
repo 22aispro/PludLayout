@@ -1,12 +1,14 @@
 local tween_service = game:GetService("TweenService")
 
 export type Layout = {
-	Padding: UDim2;
-	Size: UDim2;
-	ConstantUpdates: boolean;
-	SmoothUpdates: boolean;
-	UpdateTween: TweenInfo; -- only works with constant updates and smooth updates
-	Linked: Frame;
+    Padding: UDim2;
+    Size: UDim2;
+    ConstantUpdates: boolean;
+    SmoothUpdates: boolean;
+    UpdateTween: TweenInfo;
+    Linked: Frame;
+    blacklisted: {[GuiObject]: true};
+    affected_objs: {GuiObject};
 }
 
 local plud_layout = {}
@@ -40,13 +42,13 @@ function plud_layout:update()
 	
 	local cleaned = {}
 	for _, obj in self.affected_objs do
-		if obj and obj.Parent and not table.find(self.blacklisted, obj) then
+		if obj and obj.Parent and not self.blacklisted[obj] then
 			table.insert(cleaned, obj)
 		end
 	end
 	self.affected_objs = cleaned
 	
-	local cols = math.floor(1 / self.Size.X.Scale)
+	local cols = math.max(1, math.floor(1 / math.max(0.001, self.Size.X.Scale)))
 	local x, y = 0, 0
 	
 	for i, obj in self.affected_objs do
@@ -76,18 +78,17 @@ function plud_layout:update()
 	end
 end
 
-function plud_layout:blacklist(obj: Object)
+function plud_layout:blacklist(obj: GuiObject)
 	if not obj then return end
-	table.insert(self.blacklisted, obj)
+	self.blacklisted[obj] = true
 end
 
-function plud_layout:whitelist(obj: Object)
-	if not obj then return end
-	if table.find(self.blacklisted, obj) then
-		table.remove(self.blacklisted, table.find(self.blacklisted, obj))
-	end
-
-	table.insert(self.affected_objs, obj)
+function plud_layout:whitelist(obj: GuiObject)
+    if not obj then return end
+    self.blacklisted[obj] = nil 
+    if not table.find(self.affected_objs, obj) then
+        table.insert(self.affected_objs, obj)
+    end
 end
 
 return plud_layout
