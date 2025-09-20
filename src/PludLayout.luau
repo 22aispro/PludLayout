@@ -5,7 +5,7 @@ export type Layout = {
 	Size: UDim2;
 	ConstantUpdates: boolean;
 	SmoothUpdates: boolean;
-	UpdateTween: TweenInfo; -- only works with constant updates and smooth updates
+	UpdateTween: TweenInfo; -- only works with constant updates and smooth updates || fonctionne uniquement avec des mises à jour constantes et des mises à jour fluides || Solo funciona con actualizaciones constantes y actualizaciones fluidas.
 	Linked: Frame;
 }
 
