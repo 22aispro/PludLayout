@@ -1,3 +1,4 @@
+local DEBUGGING = true
 local tween_service = game:GetService("TweenService")
 
 export type Layout = {
@@ -25,13 +26,13 @@ function plud_layout.create_layout(grid_data: Layout)
 	for i, v in grid_data do self[i] = v end
 	
 	self.Linked.ChildAdded:Connect(function(child)
-		print(`New child: {child}`)
+		if DEBUGGING then warn(`New child: {child}`) end
 		self:whitelist(child)
 	end)
 	
 	
 	self.Linked.ChildRemoved:Connect(function(child)
-		print(`Lost child: {child}`)
+		if DEBUGGING then warn(`Lost child: {child}`) end
 		self:blacklist(child)
 	end)
 	
@@ -73,6 +74,7 @@ function plud_layout:update()
 		if self.SmoothUpdates and self.UpdateTween then
 			tween_service:Create(obj, self.UpdateTween, {Position = pos}):Play()
 			obj.Size = self.Size
+			if DEBUGGING then warn("Tween have started for " ..obj) end
 		else
 			obj.Position = pos
 			obj.Size = self.Size
@@ -89,11 +91,12 @@ function plud_layout:blacklist(obj: Object)
 	for i = 1, #self.Whitelisted do
 		if self.Whitelisted[i] == obj then
 			self.Whitelisted[i] = nil
+			if DEBUGGING then warn("BlackListed: " ..obj) end
 			break
 		end
 	end
 
-	if table.find(self.Initialized, obj) then
+	if self.Initialized[obj] then
 		self.Initialized[obj] = false
 	end
 end
@@ -101,7 +104,7 @@ end
 
 function plud_layout:whitelist(obj: Object)
 	if not obj then return end
-	if table.find(self.Blacklisted, obj) then
+	if self.Blacklisted[obj] then
 		self.Blacklisted[obj] = false
 	end
 	
@@ -110,11 +113,12 @@ function plud_layout:whitelist(obj: Object)
 		if self.Whitelisted[i] == nil then
 			self.Whitelisted[i] = obj
 			slot_found = true
+			if DEBUGGING then warn("WhiteListed: " ..obj) end
 			break
 		end
 	end
 	if not slot_found then
-		table.insert(self.Whitelisted, obj)
+		self.Whitelisted[obj] = true
 	end
 end
 
