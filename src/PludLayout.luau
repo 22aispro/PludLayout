@@ -8,8 +8,8 @@ export type Layout = {
 	UpdateTween: TweenInfo;
 	Linked: Frame;
 	Whitelisted: {Object};
-	Blacklisted: {Object};
-	Initialized: {Object};
+	Blacklisted: {[Object]: boolean};
+	Initialized: {[Object]: boolean};
 }
 
 local plud_layout = {}
@@ -52,8 +52,6 @@ function plud_layout:update()
 	local cols = math.floor((1 + self.Padding.X.Scale) / (self.Size.X.Scale + self.Padding.X.Scale))
 	cols = math.max(1, cols)
 	for i, obj in self.Whitelisted do
-		if table.find(self.Blacklisted, obj) then continue end
-		
 		local col = (i-1) % cols
 		local row = math.floor((i-1) / cols)
 
@@ -68,7 +66,7 @@ function plud_layout:update()
 			row * (cell_h + pad_y),
 			self.Padding.Y.Offset + row * (self.Size.Y.Offset + self.Padding.Y.Offset)
 		)
-		if obj.Position == obj then continue end
+		if obj.Position == pos then continue end
 		
 		if self.SmoothUpdates and self.UpdateTween then
 			tween_service:Create(obj, self.UpdateTween, {Position = pos}):Play()
@@ -93,17 +91,13 @@ function plud_layout:blacklist(obj: Object)
 		end
 	end
 
-	if table.find(self.Initialized, obj) then
-		self.Initialized[obj] = false
-	end
+	self.Initialized[obj] = false
 end
 
 
 function plud_layout:whitelist(obj: Object)
 	if not obj then return end
-	if table.find(self.Blacklisted, obj) then
-		self.Blacklisted[obj] = false
-	end
+	self.Blacklisted[obj] = nil
 	
 	local slot_found = false
 	for i = 1, #self.Whitelisted do
