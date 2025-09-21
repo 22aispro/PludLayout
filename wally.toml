@@ -1,0 +1,12 @@
+[package]
+name = "22a/pludlayout"
+description = "A better version and more customizable version of roblox's ui grid layouts"
+license = "MIT"
+authors = ["22a", "al_ex427 (for wally package)"]
+version = "0.1.0"
+registry = "https://github.com/UpliftGames/wally-index"
+realm = "shared"
+exclude = ["aftman.toml"]
+
+
+[dependencies]
