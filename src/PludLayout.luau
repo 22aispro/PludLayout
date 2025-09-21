@@ -109,6 +109,7 @@ function plud_layout:whitelist(obj: Object, p_offset, s_offset)
 	p_offset = p_offset or UDim2.new(0, 0, 0, 0)
 	s_offset = s_offset or UDim2.new(0, 0, 0, 0)
 	if not obj then return end
+	if obj:HasTag("Ignore") then return end
 	
 	local data = {
 		object = obj;
