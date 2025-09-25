@@ -28,7 +28,7 @@ jobs:
         run: wally --version
         
       - name: Authentificate Wally
-        run: wally login --token "${{ secrets.GITHUB_TOKEN }}"
+        run: wally login --token "${{ secrets.WALLY_AUTHTOKEN }}"
         
       - name: Publish to wally
         run: wally publish
