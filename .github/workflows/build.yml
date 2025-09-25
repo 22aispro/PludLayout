@@ -26,8 +26,8 @@ jobs:
 
       - name: Authentificate wally
         env:
-          GITHUB_TOKEN: ${{ secrets.WALLY_AUTHTOKEN }}
-        run: wally login --token "$GITHUB_TOKEN"
+          WALLY_AUTH_TOKEN: ${{ secrets.WALLY_AUTHTOKEN }}
+        run: wally login --token "$WALLY_AUTH_TOKEN"
         
       - name: Publish to wally
 
