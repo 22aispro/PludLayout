@@ -1,19 +1,16 @@
-# This is a basic workflow to help you get started with Actions
+# when will this work vro
 
 name: Deploy
 
-# Controls when the workflow will run
+
 on:
-  # Triggers the workflow on push or pull request events but only for the "main" branch
   push:
     branches: [ "main" ]
   pull_request:
     branches: [ "main" ]
 
-  # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   
   deploy:
@@ -26,11 +23,11 @@ jobs:
         uses: ok-nick/setup-aftman@v0.4.2
       - name: Check wally version
         run: wally --version
-        
-      - name: Authentificate Wally
-        run: wally login --token "${{ secrets.WALLY_AUTHTOKEN }}"
-        
-      - name: Publish to wally
+      
+  
+      - name: Authentificate & Publish to wally
+        env:
+          GITHUB_TOKEN: ${{ secrets.WALLY_AUTHTOKEN }}
         run: wally publish
       
        
