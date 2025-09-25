@@ -38,15 +38,17 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v3.3.0
+      - name: Set up Aftman
+        uses: ok-nick/setup-aftman@v0.4.2
       - name: Restore cached Aftman tools
         uses: actions/cache@v3
         with:
           path: ~/.aftman
           key: aftman-${{ hashFiles('aftman.toml') }}
-      - name: Reinstall tools
-        run: aftman install
       - name: Authentificate Wally
         run: wally login --token "${{ secrets.GITHUB_TOKEN }}"
+      - name: Publish to wally
+        run: wally publish
       
        
       
