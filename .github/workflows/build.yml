@@ -28,6 +28,20 @@ jobs:
         with:
           path: ~/.aftman
           key: aftman-${{ hashFiles('aftman.toml') }}
-      - name: Install Wally dependencies
-        run: wally install
+      - name: Check wally version
+        run: wally --version
+        
+  deploy:
+    name: Deploy to wally
+    runs-on: ubuntu-latest
+    needs: [install-tools]
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3.3.0
+      - name: Restore cached Aftman tools
+        uses: actions/cache@v3
+        with:
+          path: ~/.aftman
+          key: aftman-${{ hashFiles('aftman.toml') }}
+       
       
