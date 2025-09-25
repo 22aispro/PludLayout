@@ -43,5 +43,8 @@ jobs:
         with:
           path: ~/.aftman
           key: aftman-${{ hashFiles('aftman.toml') }}
+      - name: Authentificate Wally
+        run: wally login --token "${{ secrets.GITHUB_TOKEN }}"
+      
        
       
