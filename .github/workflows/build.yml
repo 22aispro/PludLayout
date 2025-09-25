@@ -31,7 +31,7 @@ jobs:
         run: wally login --token "${{ secrets.GITHUB_TOKEN }}"
         
       - name: Publish to wally
-        run: wally publish --token "${{ secrets.GITHUB_TOKEN }}"
+        run: wally publish
       
        
       
