@@ -24,7 +24,8 @@ jobs:
     steps:
       - uses: ok-nick/setup-aftman@v0.4.2
 
-      - name: Check wally
-        run: wally --version
+      - name: Check Rokit
+        run: rokit --version
+      
         
       
