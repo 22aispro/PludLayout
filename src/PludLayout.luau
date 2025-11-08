@@ -35,7 +35,7 @@ function plud_layout.create_layout(grid_data: Layout)
 		print(`Lost child: {child}`)
 		self:blacklist(child)
 	end)
-	
+
 	for _, child in self.Linked:GetChildren() do
 		self:whitelist(child)
 	end
@@ -59,7 +59,7 @@ function plud_layout:update()
 	cols = math.max(1, cols)
 	for i, obj_data in self.whitelisted do
 		local obj = obj_data.object
-		
+
 		local col = (i-1) % cols
 		local row = math.floor((i-1) / cols)
 
@@ -67,9 +67,9 @@ function plud_layout:update()
 		local cell_h = self.Size.Y.Scale
 		local pad_x = self.Padding.X.Scale
 		local pad_y = self.Padding.Y.Scale
-	
+
 		local size = self.Size + obj_data.size_offset
-		
+
 		local pos = UDim2.new(
 			col * (cell_w + pad_x),
 			self.Padding.X.Offset + col * (self.Size.X.Offset + self.Padding.X.Offset),
@@ -79,8 +79,8 @@ function plud_layout:update()
 		local halfed_x = obj_data.og_size.X.Scale / 2
 		local halfed_y = obj_data.og_size.Y.Scale / 2
 		pos = (pos + obj_data.offset) + UDim2.new(halfed_x, 0, halfed_y, 0)
-		
-		if obj.Position == pos then continue end
+
+		if obj.Position == pos and obj.Size == size then continue end
 
 		if self.SmoothUpdates and self.UpdateTween then
 			local data = {Position = pos}
@@ -110,7 +110,7 @@ function plud_layout:whitelist(obj: Object, p_offset, s_offset)
 	s_offset = s_offset or UDim2.new(0, 0, 0, 0)
 	if not obj then return end
 	if obj:HasTag("Ignore") then return end
-	
+
 	local data = {
 		object = obj;
 		offset = p_offset;
